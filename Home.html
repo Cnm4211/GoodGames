@@ -1,11 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>My Test Site</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Good Games</title>
+  <link rel="stylesheet" href="Home.css" />
 </head>
+
 <body>
-  <h1>Hello, GitHub Pages!</h1>
-  <p>This is just a placeholder so deployment works.</p>
+  <div class="container">
+
+    <!-- Title -->
+    <p class="title">
+      <span class="bigLetter">G</span>ood
+      <span class="bigLetter">G</span>ame
+      <span class="bigLetter">S</span>
+    </p>
+
+    <!-- Auth Buttons -->
+    <div class="auth-buttons">
+      <button class="auth-button" id="signInButton">Sign In</button>
+      <button class="auth-button" id="signUpButton">Sign Up</button>
+    </div>
+
+    <!-- List Button (only show if logged in in your future JS) -->
+    <button class="auth-button" id="myListButton">My List</button>
+
+    <!-- Search -->
+
+    <h3 class="searchTitle">Search for a Game!</h3>
+    <div class="search-controls">
+      <input type="text" class="searchBar" placeholder="Enter a game name..." />
+      <button class="searchButton">Search</button>
+    </div>
+
+
+    <!-- Carousel (placeholder image for now) -->
+    <div class="carousel">
+      <p>Carosel here</p>
+    </div>
+  </div>
 </body>
+
 </html>
