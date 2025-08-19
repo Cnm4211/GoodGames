@@ -112,3 +112,12 @@ html, body{
 .searchButton:hover {
   background-color: #0056b3;
 }
+
+.home-link{
+  text-decoration: none;
+  color: inherit;;
+}
+
+.home-link:hover{
+  cursor: pointer;
+}
