@@ -1,2 +1,6 @@
 #Ignore database folder
 node_modules/
+
+.env
+
+ggUsers.sql
