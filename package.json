@@ -1,0 +1,18 @@
+{
+  "name": "good-games",
+  "version": "1.0.0",
+  "description": "Good Games (GGs) will be a website similar to GoodReads. A website where you can search for all of your favorite games, add them to your list, rate them, discuss them, and share your favorites.",
+  "main": "db.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.3"
+  }
+}
