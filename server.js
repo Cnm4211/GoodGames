@@ -12,13 +12,27 @@ app.post('/signup', async (req, res) => {
     if (!username || !email || !password) {
         return res.status(400).json({ message: 'Missing username, email, or password' });
     }
+
+    if (password.length < 8) {
+        return res.status(400).json({ message: 'Password must be at least 8 characters long' });
+    }
     
     
     try{
+        //check if user exists
+        const [existingUser] = await pool.query(
+            'SELECT * FROM users WHERE email = ? OR username = ?',
+            [email.toLowerCase(), username]
+        );
+
+        if (existingUser.length > 0){
+            return res.status(409).json({message: 'User with this email or username already exists'});
+        }
+
+
         //hash password
         const passwordHash = await bcrypt.hash(password, 10);
-
-        console.log(username, email, passwordHash);
+        
         //insert into database
         const [result] = await pool.query(
             'INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)',
