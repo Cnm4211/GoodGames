@@ -1,9 +1,18 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import pool from './db.js';
+import dotenv from 'dotenv';
+import axios from 'axios';
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+const RAWG_BASE_URL = 'https://api.rawg.io/api';
+
+
 
 //SIGNUP
 app.post('/signup', async (req, res) => {
@@ -32,7 +41,7 @@ app.post('/signup', async (req, res) => {
 
         //hash password
         const passwordHash = await bcrypt.hash(password, 10);
-        
+
         //insert into database
         const [result] = await pool.query(
             'INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)',
@@ -81,6 +90,47 @@ app.post('/login', async (req, res) => {
 });
 
 
+//Rawg API routes
+
+app.get('/games', async (req, res) => {
+    const {search} = req.query;
+    try{
+        const response = await axios.get(`${RAWG_BASE_URL}/games`, {
+            params: {
+                key: process.env.RAWG_API_KEY,
+                search: search,
+            },
+        });
+
+        res.json(response.data);
+    }
+    catch (err){
+        console.error(err);
+        res.status(500).json({message: 'Failed to fetch games', error: err.message});
+    }
+});
+
+//details about one game
+app.get('/games/:id', async (req, res) => {
+    const {id} = req.params;
+    try {
+        const response = await axios.get(`${RAWG_BASE_URL}/games/${id}`, {
+            params: {
+                key: process.env.RAWG_API_KEY,
+            },
+        });
+
+        res.json(response.data);
+    }
+    catch (err){
+        console.error(err);
+        res.status(500).json({message: 'Failed to fetch game details', error: err.message});
+    }
+});
+
+
+
+//ROOT
 app.get('/', (req, res) => {
     res.send('Server is running');
 });
