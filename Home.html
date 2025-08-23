@@ -33,10 +33,13 @@
 
     <h3 class="searchTitle">Search for a Game!</h3>
     <div class="search-controls">
-      <input type="text" class="searchBar" placeholder="Enter a game name..." />
-      <button class="searchButton">Search</button>
+      <input type="text" class="searchBar" id="searchBar" placeholder="Enter a game name..." />
+      <button class="searchButton" id="searchButton">Search</button>
     </div>
 
+    <div class="results" id="results">
+      
+    </div>
 
     <!-- Carousel (placeholder image for now) -->
     <div class="carousel">
@@ -44,5 +47,29 @@
     </div>
   </div>
 </body>
+
+<script>
+  document.getElementById('searchButton').addEventListener('click', async () => {
+    const query = document.getElementById('searchBar').value;
+    const res = await fetch(`/games?search=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    console.log(data);
+
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '';
+
+    if (!data.results || data.results.length === 0){
+      resultsDiv.innerHTML = '<p>No results found</p>';
+      return;
+    }
+
+    data.results.forEach(game =>{
+      const p = document.createElement('p');
+      p.textContent = `${game.name} (${game.released}) - Rating: ${game.rating}`;
+      resultsDiv.appendChild(p);
+    });
+  });
+
+</script>
 
 </html>
