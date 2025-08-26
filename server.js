@@ -101,19 +101,27 @@ app.post('/login', async (req, res) => {
 
 app.get('/games', async (req, res) => {
     const {search} = req.query;
+    if (!search || search.trim() === ''){
+        return res.status(400).json({message: 'Search query is required'});
+    }
+
+    if (search.length > 100){
+        return res.status(400).json({message: 'Search query is too long'});
+    }
+
     try{
         const response = await axios.get(`${RAWG_BASE_URL}/games`, {
             params: {
                 key: process.env.RAWG_API_KEY,
                 search: search,
-                page_size: 5,
+                page_size: 10,
                 page: 1,
 
             },
         });
 
         res.json(response.data);
-    }
+        }
     catch (err){
         console.error(err);
         res.status(500).json({message: 'Failed to fetch games', error: err.message});

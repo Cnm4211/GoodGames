@@ -38,7 +38,7 @@
     </div>
 
     <div class="results" id="results">
-
+      <!--Add styles to this results div to make the img next to the P-->
     </div>
 
     <!-- Carousel (placeholder image for now) -->
@@ -64,9 +64,27 @@
     }
 
     data.results.forEach(game => {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'result-item';
+
+      const img = document.createElement('img');
+      img.src = game.background_image || 'https://via.placeholder.com/100';
+      img.alt = game.name;
+      img.style.maxWidth = '100px';
+      img.style.maxHeight = '100px';
+
+      const textDiv = document.createElement('div');
       const p = document.createElement('p');
       p.textContent = `${game.name} (${game.released}) - Rating: ${game.rating}`;
-      resultsDiv.appendChild(p);
+      textDiv.appendChild(p);
+
+      const plus = document.createElement('button');
+      plus.textContent = '+';
+
+      itemDiv.appendChild(img);
+      itemDiv.appendChild(textDiv);
+      itemDiv.appendChild(plus);
+      resultsDiv.appendChild(itemDiv);
     });
   });
 
