@@ -3,12 +3,11 @@ html, body{
     height: 100%;
     margin: 0;
     padding: 0;
+    background-color: black;
 }
 /* Page Container */
 .container {
-  background-color: black;
   color: cyan;
-  height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -121,3 +120,26 @@ html, body{
 .home-link:hover{
   cursor: pointer;
 }
+
+.results{
+  margin-top: 20px;
+}
+
+.result-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.result-item img{
+  object-fit: cover;
+}
+
+.result-item button{
+  cursor: pointer;
+}
+
