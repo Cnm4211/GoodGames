@@ -51,7 +51,7 @@
 <script>
   document.getElementById('searchButton').addEventListener('click', async () => {
     const query = document.getElementById('searchBar').value;
-    const res = await fetch(`http://localhost:3000/games?search=${encodeURIComponent(query)}`);
+    const res = await fetch(`/games?search=${encodeURIComponent(query)}`);
     const data = await res.json();
     console.log(data);
 

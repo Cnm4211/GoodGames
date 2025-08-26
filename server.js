@@ -3,10 +3,17 @@ import bcrypt from 'bcrypt';
 import pool from './db.js';
 import dotenv from 'dotenv';
 import axios from 'axios';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -99,6 +106,9 @@ app.get('/games', async (req, res) => {
             params: {
                 key: process.env.RAWG_API_KEY,
                 search: search,
+                page_size: 5,
+                page: 1,
+
             },
         });
 
@@ -132,7 +142,7 @@ app.get('/games/:id', async (req, res) => {
 
 //ROOT
 app.get('/', (req, res) => {
-    res.send('Server is running');
+    res.sendFile(path.join(__dirname, 'public', 'Home.html'));
 });
 
 app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
