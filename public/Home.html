@@ -38,7 +38,7 @@
     </div>
 
     <div class="results" id="results">
-      
+
     </div>
 
     <!-- Carousel (placeholder image for now) -->
@@ -51,19 +51,19 @@
 <script>
   document.getElementById('searchButton').addEventListener('click', async () => {
     const query = document.getElementById('searchBar').value;
-    const res = await fetch(`/games?search=${encodeURIComponent(query)}`);
+    const res = await fetch(`http://localhost:3000/games?search=${encodeURIComponent(query)}`);
     const data = await res.json();
     console.log(data);
 
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
 
-    if (!data.results || data.results.length === 0){
+    if (!data.results || data.results.length === 0) {
       resultsDiv.innerHTML = '<p>No results found</p>';
       return;
     }
 
-    data.results.forEach(game =>{
+    data.results.forEach(game => {
       const p = document.createElement('p');
       p.textContent = `${game.name} (${game.released}) - Rating: ${game.rating}`;
       resultsDiv.appendChild(p);
