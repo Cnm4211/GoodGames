@@ -22,12 +22,8 @@
     <div class="auth-buttons">
       <a href="signIn.html"> <button class="auth-button" id="signInButton">Sign In</button> </a>
       <a href="signUp.html"> <button class="auth-button" id="signUpButton">Sign Up</button> </a>
+      <button class="auth-button" id="myListButton" style= "display:none; width: 150px; " >My List </button>
     </div>
-
-
-
-    <!-- List Button (only show if logged in in your future JS) -->
-    <button class="auth-button" id="myListButton">My List (Make not visible if not logged in)</button>
 
     <!-- Search -->
 
@@ -38,7 +34,7 @@
     </div>
 
     <div class="results" id="results">
-      <!--Add styles to this results div to make the img next to the P-->
+
     </div>
 
     <!-- Carousel (placeholder image for now) -->
@@ -49,6 +45,28 @@
 </body>
 
 <script>
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const myListButton = document.getElementById('myListButton');
+    const signInButton = document.getElementById('signInButton');
+    const signUpButton = document.getElementById('signUpButton');
+    if (token) {
+      myListButton.style.display = 'block';
+      signInButton.style.display = 'none';
+      signUpButton.style.display = 'none';
+    }
+    else {
+      myListButton.style.display = 'none';
+    }
+  })
+
+  document.getElementById('searchBar').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      document.getElementById('searchButton').click();
+    }
+  })
+
   document.getElementById('searchButton').addEventListener('click', async () => {
     const query = document.getElementById('searchBar').value;
     const res = await fetch(`/games?search=${encodeURIComponent(query)}`);

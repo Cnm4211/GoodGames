@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -81,12 +82,17 @@ app.post('/login', async (req, res) => {
 
 
         const isMatch = await bcrypt.compare(password, user.password_hash);
-
         if (!isMatch){
             return res.status(401).json({message: "Invalid credentials"});
         }
 
-        res.json ({ message: "Login Successful", userId: user.id});
+        const token = jwt.sign(
+            { userId: user.id, userName: user.username},
+            process.env.JWT_SECRET,
+            { expiresIn: '2h' }
+        )
+
+        res.json ({ message: "Login Successful", token});
 
     }
     catch (err) {
