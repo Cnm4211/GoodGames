@@ -22,8 +22,42 @@
     <div class="auth-buttons">
       <a href="signIn.html"> <button class="auth-button" id="signInButton">Sign In</button> </a>
       <a href="signUp.html"> <button class="auth-button" id="signUpButton">Sign Up</button> </a>
-      <button class="auth-button" id="myListButton" style= "display:none; width: 150px; " >My List </button>
+      <button class="auth-button" id="myListButton" style="display:none; width: 150px; ">My List </button>
     </div>
+
+    <div class="sideMenu" id="sideMenu">
+      <div class="hamburger" id="hamburger">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="sideMenuPanel" id="sideMenuPanel">
+        <div class="hamburger" id="sideMenuHamburger">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="sideMenuItems">
+          <div class="sideMenuItem">
+            <a href="Home.html" class="menuItem" id="homeLink">Home</a>
+          </div>
+          <div class="sideMenuItem">
+            <a href="myList.html" class="menuItem" id="myListLink">My List</a>
+          </div>
+          <div class="sideMenuItem">
+            <a href="search.html" class="menuItem" id="myListLink">Search</a>
+          </div>
+          <div class="sideMenuItem">
+            <a href="myList.html" class="menuItem" id="myListLink">Placeholder</a>
+          </div>
+          <div class="sideMenuItem">
+            <a href="about.html" class="menuItem" id="aboutLink">About</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
 
     <!-- Search -->
 
@@ -46,18 +80,43 @@
 
 <script>
 
+  document.getElementById('hamburger').addEventListener('click', function () {
+    const panel = document.getElementById('sideMenuPanel');
+    panel.classList.toggle('open');
+  });
+
+  document.getElementById('sideMenuHamburger').addEventListener('click', function () {
+    const panel = document.getElementById('sideMenuPanel');
+    panel.classList.remove('open');
+  });
+
+  function isTokenValid(token) {
+    if (!token) return false;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 > Date.now();
+    }
+    catch (e) {
+      return false;
+    }
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const myListButton = document.getElementById('myListButton');
     const signInButton = document.getElementById('signInButton');
     const signUpButton = document.getElementById('signUpButton');
-    if (token) {
+    console.log('Token:', token);
+    if (isTokenValid(token)) {
       myListButton.style.display = 'block';
       signInButton.style.display = 'none';
       signUpButton.style.display = 'none';
     }
     else {
       myListButton.style.display = 'none';
+      signInButton.style.display = 'block';
+      signUpButton.style.display = 'block';
     }
   })
 
