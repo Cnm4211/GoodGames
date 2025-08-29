@@ -41,7 +41,7 @@
           <div class="sideMenuItem">
             <a href="Home.html" class="menuItem" id="homeLink">Home</a>
           </div>
-          <div class="sideMenuItem">
+          <div class="sideMenuItem" id="myListItem" style="display: none;">
             <a href="myList.html" class="menuItem" id="myListLink">My List</a>
           </div>
           <div class="sideMenuItem">
@@ -107,11 +107,13 @@
     const myListButton = document.getElementById('myListButton');
     const signInButton = document.getElementById('signInButton');
     const signUpButton = document.getElementById('signUpButton');
+    const sideMenuMyList = document.getElementById('myListItem');
     console.log('Token:', token);
     if (isTokenValid(token)) {
       myListButton.style.display = 'block';
       signInButton.style.display = 'none';
       signUpButton.style.display = 'none';
+      sideMenuMyList.style.display = 'block';
     }
     else {
       myListButton.style.display = 'none';

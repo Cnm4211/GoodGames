@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Good Games</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Title -->
+        <p class="title">
+            <span class="bigLetter">G</span>ood
+            <span class="bigLetter">G</span>ame
+            <span class="bigLetter">S</span>
+        </p>
+
+        <!-- Auth Buttons -->
+
+        <div class="sideMenu" id="sideMenu">
+            <div class="hamburger" id="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="sideMenuPanel" id="sideMenuPanel">
+                <div class="hamburger" id="sideMenuHamburger">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="sideMenuItems">
+                    <div class="sideMenuItem">
+                        <a href="Home.html" class="menuItem" id="homeLink">Home</a>
+                    </div>
+                    <div class="sideMenuItem" id="myListItem" style="display: none;">
+                        <a href="myList.html" class="menuItem" id="myListLink">My List</a>
+                    </div>
+                    <div class="sideMenuItem">
+                        <a href="search.html" class="menuItem" id="myListLink">Search</a>
+                    </div>
+                    <div class="sideMenuItem">
+                        <a href="myList.html" class="menuItem" id="myListLink">Placeholder</a>
+                    </div>
+                    <div class="sideMenuItem">
+                        <a href="about.html" class="menuItem" id="aboutLink">About</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="myListContainer" id="myListContainer">
+            <h2 class="listTitle" id="listTitle">My Games List</h2>
+            <div class="listBox" id="listBox">
+                <p>test</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    document.getElementById('hamburger').addEventListener('click', function () {
+        const panel = document.getElementById('sideMenuPanel');
+        panel.classList.toggle('open');
+    });
+
+    document.getElementById('sideMenuHamburger').addEventListener('click', function () {
+        const panel = document.getElementById('sideMenuPanel');
+        panel.classList.remove('open');
+    });
+
+    function isTokenValid(token) {
+        if (!token) return false;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.exp * 1000 > Date.now();
+        }
+        catch (e) {
+            return false;
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+        const myListButton = document.getElementById('myListButton');
+        const signInButton = document.getElementById('signInButton');
+        const signUpButton = document.getElementById('signUpButton');
+        const sideMenuMyList = document.getElementById('myListItem');
+        console.log('Token:', token);
+        if (isTokenValid(token)) {
+            myListButton.style.display = 'block';
+            signInButton.style.display = 'none';
+            signUpButton.style.display = 'none';
+            sideMenuMyList.style.display = 'block';
+        }
+        else {
+            myListButton.style.display = 'none';
+            signInButton.style.display = 'block';
+            signUpButton.style.display = 'block';
+        }
+    })
+</script>
+
+</html>
