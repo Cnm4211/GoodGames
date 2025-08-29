@@ -122,7 +122,8 @@ app.get('/games', async (req, res) => {
                 search: search,
                 page_size: 10,
                 page: 1,
-
+                ordering: '-rating',
+                
             },
         });
 

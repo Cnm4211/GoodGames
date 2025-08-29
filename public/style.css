@@ -215,3 +215,26 @@ html, body{
 .sideMenuItems {
   margin-top: 20px;
 }
+
+.myListContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.listTitle{
+  text-decoration: none;
+  color: cyan;
+  font-family: "Tiny5", sans-serif;
+  font-weight: 400;
+  font-size: 40px;
+}
+
+.listBox{
+  border-color: cyan;
+  border-width: 2px;
+  border-style: solid;
+  width: 1100px;
+  
+
+}
