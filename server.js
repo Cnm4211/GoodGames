@@ -6,6 +6,7 @@ import axios from 'axios';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import jwt from 'jsonwebtoken';
+import myListRoutes from './myList.js';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use('/myList', myListRoutes);
 
 const RAWG_BASE_URL = 'https://api.rawg.io/api';
 
