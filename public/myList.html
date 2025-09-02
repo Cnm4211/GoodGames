@@ -56,14 +56,87 @@
 
         <div class="myListContainer" id="myListContainer">
             <h2 class="listTitle" id="listTitle">My Games List</h2>
-            <div class="listBox" id="listBox">
-                <p>test</p>
-            </div>
+            <table id="myTable">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Genre</th>
+                        <th>Platforms</th>
+                        <th>Release Year</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+
+                </tbody>
+            </table>
         </div>
     </div>
 </body>
+<style>
+    img {
+        max-width: 100px;
+        border-radius: 8px;
+    }
+</style>
 
 <script>
+
+    const testTable = [
+        {
+            image: 'https://via.placeholder.com/100',
+            title: 'Game 1',
+            genre: 'Action',
+            platforms: 'PC, PS5',
+            releaseYear: 2022,
+            rating: '9/10'
+        },
+        {
+            image: 'https://via.placeholder.com/100',
+            title: 'Game 2',
+            genre: 'Adventure',
+            platforms: 'Xbox, Switch',
+            releaseYear: 2021,
+            rating: '8.5/10'
+        },
+        {
+            image: 'https://via.placeholder.com/100',
+            title: 'Game 3',
+            genre: 'RPG',
+            platforms: 'PC, PS4',
+            releaseYear: 2020,
+            rating: '9.5/10'
+        }
+    ]
+
+    const tbody = document.querySelector('#myTable tbody');
+
+    testTable.forEach(game => {
+        const row = document.createElement('tr');
+        const imgCell = document.createElement('td');
+        const img = document.createElement('img');
+
+        if(game.image){
+            img.src = game.image;
+            img.alt = game.title;
+            imgCell.appendChild(img);
+            row.appendChild(imgCell);
+        }
+        else{
+            imgCell.textContent = 'No Image';
+        }
+        
+        ['title', 'genre', 'platforms', 'releaseYear', 'rating'].forEach(key => {
+            const cell = document.createElement('td');
+            cell.textContent = game[key];
+            row.appendChild(cell);
+        });
+
+        tbody.appendChild(row);
+    })
+
+
 
     document.getElementById('hamburger').addEventListener('click', function () {
         const panel = document.getElementById('sideMenuPanel');
@@ -89,21 +162,9 @@
 
     window.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('token');
-        const myListButton = document.getElementById('myListButton');
-        const signInButton = document.getElementById('signInButton');
-        const signUpButton = document.getElementById('signUpButton');
         const sideMenuMyList = document.getElementById('myListItem');
-        console.log('Token:', token);
         if (isTokenValid(token)) {
-            myListButton.style.display = 'block';
-            signInButton.style.display = 'none';
-            signUpButton.style.display = 'none';
             sideMenuMyList.style.display = 'block';
-        }
-        else {
-            myListButton.style.display = 'none';
-            signInButton.style.display = 'block';
-            signUpButton.style.display = 'block';
         }
     })
 </script>
