@@ -91,7 +91,7 @@
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ game_name: game.name})
+            body: JSON.stringify({ game_name: game.name, image: game.background_image, genre: game.genres.map(g => g.name).join(', '), platforms: game.platforms.map(p => p.platform.name).join(', '), release_year: game.released ? game.released.split('-')[0] : 'N/A', rating: game.rating  })
           });
 
           const result = await res.json();

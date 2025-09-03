@@ -5,30 +5,31 @@ import jwt from 'jsonwebtoken';
 const router = express.Router();
 
 //verify JWT
-function authenticate(req, res, next){
+function authenticate(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
-    if (!token) return res.status(401).json({message: 'No token provided'});
+    if (!token) return res.status(401).json({ message: 'No token provided' });
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({message: 'Invalid token'});
+        if (err) return res.status(403).json({ message: 'Invalid token' });
         req.user = user;
         next();
     });
 }
 
 router.post('/', authenticate, async (req, res) => {
-    const {game_name} = req.body;
+    const { game_name, image, genre, platforms, release_year, rating } = req.body;
+
     try {
         await pool.query(
-            'INSERT INTO gamesList (user_id, game_name) VALUES (?, ?)',
-            [req.user.userId, game_name]
+            'INSERT INTO gamesList (user_id, image, game_name, genre, platforms, release_year, rating) VALUES (?, ?, ?, ? ,? ,?, ?)',
+            [req.user.userId, game_name, image, genre, platforms, release_year, rating]
         );
-        res.json({message: 'Game added to your list'});
+        res.status(200).json({ message: 'Game added to your list' });
     }
     catch (err) {
         console.error(err);
-        res.status(500).json({message: 'Failed to add game to your list', error: err.message});
+        res.status(500).json({ message: 'Failed to add game to your list', error: err.message });
     }
 });
 
