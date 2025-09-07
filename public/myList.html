@@ -56,15 +56,98 @@
 
         <div class="myListContainer" id="myListContainer">
             <h2 class="listTitle" id="listTitle">My Games List</h2>
+            <div class="filterButtons">
+                <select id="genre" name="genre">
+                    <option value="">Genre</option>
+                    <option value="Action">Action</option>
+                    <option value="Indie">Indie</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value="RPG">RPG</option>
+                    <option value="Strategy">Strategy</option>
+                    <option value="Shooter">Shooter</option>
+                    <option value="Casual">Casual</option>
+                    <option value="Simulation">Simulation</option>
+                    <option value="Puzzle">Puzzle</option>
+                    <option value="Arcade">Arcade</option>
+                    <option value="Platformer">Platformer</option>
+                    <option value="Massively Multiplayer">Massively Multiplayer</option>
+                    <option value="Racing">Racing</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Fighting">Fighting</option>
+                    <option value="Family">Family</option>
+                    <option value="Board Games">Board Games</option>
+                    <option value="Card">Card</option>
+                    <option value="Educational">Educational</option>
+                </select>
+                <select id="platform" name="platform">
+                    <option value="">Platform</option>
+                    <option value="PC">PC</option>
+                    <option value="PlayStation 5">PlayStation 5</option>
+                    <option value="Xbox One">Xbox One</option>
+                    <option value="PlayStation 4">PlayStation 4</option>
+                    <option value="Xbox Series S/X">Xbox Series S/X</option>
+                    <option value="Nintendo Switch">Nintendo Switch</option>
+                    <option value="iOS">iOS</option>
+                    <option value="Android">Android</option>
+                    <option value="Nintendo 3DS">Nintendo 3DS</option>
+                    <option value="Nintendo DS">Nintendo DS</option>
+                    <option value="Nintendo DSi">Nintendo DSi</option>
+                    <option value="macOS">macOS</option>
+                    <option value="Linux">Linux</option>
+                    <option value="Xbox 360">Xbox 360</option>
+                    <option value="Xbox">Xbox</option>
+                    <option value="PlayStation 3">PlayStation 3</option>
+                    <option value="PlayStation 2">PlayStation 2</option>
+                    <option value="PlayStation">PlayStation</option>
+                    <option value="PS Vita">PS Vita</option>
+                    <option value="PSP">PSP</option>
+                    <option value="Wii U">Wii U</option>
+                    <option value="Wii">Wii</option>
+                    <option value="GameCube">GameCube</option>
+                    <option value="Nintendo 64">Nintendo 64</option>
+                    <option value="Game Boy Advance">Game Boy Advance</option>
+                    <option value="Game Boy Color">Game Boy Color</option>
+                    <option value="Game Boy">Game Boy</option>
+                    <option value="SNES">SNES</option>
+                    <option value="NES">NES</option>
+                    <option value="Classic Macintosh">Classic Macintosh</option>
+                    <option value="Apple II">Apple II</option>
+                    <option value="Commodore / Amiga">Commodore / Amiga</option>
+                    <option value="Atari 7800">Atari 7800</option>
+                    <option value="Atari 5200">Atari 5200</option>
+                    <option value="Atari 2600">Atari 2600</option>
+                    <option value="Atari Flashback">Atari Flashback</option>
+                    <option value="Atari 8-bit">Atari 8-bit</option>
+                    <option value="Atari ST">Atari ST</option>
+                    <option value="Atari Lynx">Atari Lynx</option>
+                    <option value="Atari XEGS">Atari XEGS</option>
+                    <option value="Genesis">Genesis</option>
+                    <option value="SEGA Saturn">SEGA Saturn</option>
+                    <option value="SEGA CD">SEGA CD</option>
+                    <option value="SEGA 32X">SEGA 32X</option>
+                    <option value="SEGA Master System">SEGA Master System</option>
+                    <option value="Dreamcast">Dreamcast</option>
+                    <option value="3DO">3DO</option>
+                    <option value="Jaguar">Jaguar</option>
+                    <option value="Game Gear">Game Gear</option>
+                    <option value="Neo Geo">Neo Geo</option>
+                </select>
+                <button class="filterButton" id="release_year">Release Year</button>
+                <button class="filterButton" id="rating">Rating</button>
+                <button class="filterButton" id="score">Score</button>
+
+            </div>
             <table id="myTable">
                 <thead>
                     <tr>
+                        <th style="width: 30px;">#</th>
                         <th>Image</th>
                         <th>Title</th>
                         <th>Genre</th>
                         <th>Platforms</th>
                         <th>Release Year</th>
                         <th>Rating</th>
+                        <th>Score</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -83,6 +166,7 @@
 
 <script>
 
+    gamesList = [];
     async function getMyList() {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -103,51 +187,8 @@
             const tableBody = document.getElementById('tableBody');
 
             if (res.ok) {
-                // Clear previous rows
-                tableBody.innerHTML = '';
-
-                result.forEach(game => {
-                    const row = document.createElement('tr');
-
-                    // Image cell
-                    const imgCell = document.createElement('td');
-                    if (game.image) {
-                        const img = document.createElement('img');
-                        img.src = game.image;
-                        img.alt = game.game_name || 'Game Image';
-                        imgCell.appendChild(img);
-                    } else {
-                        imgCell.textContent = 'No Image';
-                    }
-                    row.appendChild(imgCell);
-
-                    // Title
-                    const titleCell = document.createElement('td');
-                    titleCell.textContent = game.game_name || '';
-                    row.appendChild(titleCell);
-
-                    // Genre
-                    const genreCell = document.createElement('td');
-                    genreCell.textContent = game.genre || '';
-                    row.appendChild(genreCell);
-
-                    // Platforms
-                    const platformsCell = document.createElement('td');
-                    platformsCell.textContent = game.platforms || '';
-                    row.appendChild(platformsCell);
-
-                    // Release Year
-                    const releaseYearCell = document.createElement('td');
-                    releaseYearCell.textContent = game.release_year || '';
-                    row.appendChild(releaseYearCell);
-
-                    // Rating
-                    const ratingCell = document.createElement('td');
-                    ratingCell.textContent = game.rating || '';
-                    row.appendChild(ratingCell);
-
-                    tableBody.appendChild(row);
-                });
+                gamesList = result;
+                renderTable(result);
             }
             else {
                 tableBody.innerHTML = 'Failed to load your list.';
@@ -159,12 +200,103 @@
         }
     }
 
+    function renderTable(games) {
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = '';
+        let number = 1;
+        games.forEach(game => {
+            const row = document.createElement('tr');
 
-    getMyList();
+            const numberCell = document.createElement('td');
+            numberCell.textContent = number;
+            row.appendChild(numberCell);
 
-/*
-Try and add pages? maybe a later thing
-*/
+            // Image cell
+            const imgCell = document.createElement('td');
+            if (game.image) {
+                const img = document.createElement('img');
+                img.src = game.image;
+                img.alt = game.game_name || 'Game Image';
+                imgCell.appendChild(img);
+            } else {
+                imgCell.textContent = 'No Image';
+            }
+            row.appendChild(imgCell);
+
+            // Title
+            const titleCell = document.createElement('td');
+            titleCell.textContent = game.game_name || '';
+            row.appendChild(titleCell);
+
+            // Genre
+            const genreCell = document.createElement('td');
+            genreCell.textContent = game.genre || '';
+            row.appendChild(genreCell);
+
+            // Platforms
+            const platformsCell = document.createElement('td');
+            platformsCell.textContent = game.platforms || '';
+            row.appendChild(platformsCell);
+
+            // Release Year
+            const releaseYearCell = document.createElement('td');
+            releaseYearCell.textContent = game.release_year || '';
+            row.appendChild(releaseYearCell);
+
+            // Rating
+            const ratingCell = document.createElement('td');
+            ratingCell.textContent = game.rating || '';
+            row.appendChild(ratingCell);
+
+            //Score
+            const scoreCell = document.createElement('td');
+            scoreCell.textContent = 0; //placeholder until i figure it out
+            row.appendChild(scoreCell);
+
+            
+            tableBody.appendChild(row);
+            number++;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) =>{
+        getMyList();
+    });
+
+
+    //add the reverse of this, probably boolean for asc/desc
+    document.getElementById('release_year').addEventListener('click', () => {
+        console.log('Sorting by release year');
+        gamesList.sort((a, b) => b.release_year - a.release_year);
+        renderTable(gamesList);
+    });
+
+    //same here, boolean for asc/desc
+    document.getElementById('rating').addEventListener('click', () => {
+        console.log('Sorting by rating');
+        gamesList.sort((a, b) => b.rating - a.rating);
+        renderTable(gamesList);
+    });
+
+    document.getElementById('genre').addEventListener('change', (event) => {
+        const genre = event.target.value;
+        console.log('Filtering by genre:', genre);
+        const filteredGames = genre ? gamesList.filter(game => game.genre.includes(genre)) : gamesList;
+        renderTable(filteredGames);
+    });
+
+    document.getElementById('platform').addEventListener('change', (event) => {
+        const platform = event.target.value;
+        console.log('Filtering by platform:', platform);
+        const filteredGames = platform ? gamesList.filter(game => game.platforms && game.platforms.includes(platform)) : gamesList;
+        renderTable(filteredGames);
+    });
+
+    document.getElementById('score').addEventListener('click', () => {
+        console.log('Sorting by score');
+        gamesList.sort((a, b) => b.score - a.score);
+        renderTable(gamesList);
+    });
 
     document.getElementById('hamburger').addEventListener('click', function () {
         const panel = document.getElementById('sideMenuPanel');
