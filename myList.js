@@ -22,7 +22,7 @@ router.post('/', authenticate, async (req, res) => {
 
     try {
         await pool.query(
-            'INSERT INTO gamesList (user_id, image, game_name, genre, platforms, release_year, rating) VALUES (?, ?, ?, ? ,? ,?, ?)',
+            'INSERT INTO gamesList (user_id, game_name, image, genre, platforms, release_year, rating) VALUES (?, ?, ?, ? ,? ,?, ?)',
             [req.user.userId, game_name, image, genre, platforms, release_year, rating]
         );
         res.status(200).json({ message: 'Game added to your list' });
