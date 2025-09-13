@@ -45,17 +45,35 @@ window.addEventListener('DOMContentLoaded', async () => {
       if (!response.ok) {
         throw new Error('Failed to fetch profile data');
       }
+      const response2 = await fetch('/profile/mygames', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response2.ok) {
+        throw new Error('Failed to fetch profile data');
+      }
+      const response3 = await fetch('/profile/favoriteGenre', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response3.ok) {
+        throw new Error('Failed to fetch profile data');
+      }
       const user = await response.json();
-
+      const mygames = await response2.json();
+      const favoriteGenre = await response3.json();
+      console.log(favoriteGenre);
       profileName.textContent = user.user.username;
 
       document.getElementById('username').innerHTML = `<strong>Username:</strong> ${user.user.username}`;
       document.getElementById('memberSince').innerHTML = `<strong>Member Since:</strong> ${new Date(user.user.created_at).toLocaleDateString()}`;
-      if (user.user.games_played !== undefined) {
-        document.getElementById('gamesPlayed').innerHTML = `<strong>Games Played:</strong> ${user.user.games_played}`;
+      if (mygames.gameCount !== undefined) {
+        document.getElementById('gamesPlayed').innerHTML = `<strong>Games Played:</strong> ${mygames.gameCount['Count(*)']}`;
       }
-      if (user.user.favorite_genre !== undefined) {
-        document.getElementById('favoriteGenre').innerHTML = `<strong>Favorite Genre:</strong> ${user.user.favorite_genre}`;
+      if (favoriteGenre.favoriteGenre !== undefined) {
+        document.getElementById('favoriteGenre').innerHTML = `<strong>Favorite Genre:</strong> ${favoriteGenre.favoriteGenre.genre}`;
       }
     }
     catch(err){

@@ -26,7 +26,7 @@ function authenticateToken(req, res, next) {
 router.get('/me', authenticateToken, async (req, res) => {
     try {
         const [rows] = await pool.query(
-            'SELECT username, email, created_at FROM users WHERE id = ?', 
+            'SELECT username, email, created_at FROM users WHERE id = ?',
             [req.user.userId]
         );
 
@@ -38,6 +38,50 @@ router.get('/me', authenticateToken, async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Failed to fetch user profile', error: err.message });
+    }
+});
+
+router.get('/mygames', authenticateToken, async (req, res) => {
+    try {
+        const [rows] = await pool.query(
+            'SELECT Count(*) FROM gamesList WHERE user_id = ?',
+            [req.user.userId]
+        );
+
+        res.json({ gameCount: rows[0] });
+
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to fetch user games', error: err.message });
+    }
+});
+
+router.get('/favoriteGenre', authenticateToken, async (req, res) => {
+    try {
+        const [rows] = await pool.query(
+            `WITH split_genres AS (
+                SELECT user_id,
+                    TRIM(REGEXP_SUBSTR(genre, '[^,]+', 1, n)) AS single_genre
+                FROM gamesList
+                CROSS JOIN (
+                    SELECT 1 AS n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5
+                ) AS numbers
+                WHERE user_id = 2
+                AND REGEXP_SUBSTR(genre, '[^,]+', 1, n) IS NOT NULL
+            )
+            SELECT single_genre AS genre
+            FROM split_genres
+            GROUP BY single_genre
+            ORDER BY COUNT(*) DESC
+            LIMIT 1`,
+            [req.user.userId]
+        );
+
+        res.json({ favoriteGenre: rows[0] || null });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to fetch favorite genre', error: err.message });
     }
 });
 
