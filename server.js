@@ -58,7 +58,13 @@ app.post('/signup', async (req, res) => {
             [username, email.toLowerCase(), passwordHash]
         );
 
-        res.status(201).json({message: 'user created successfully', userId: result.insertId});
+        const token = jwt.sign(
+            { userId: result.insertId, userName: username},
+            process.env.JWT_SECRET,
+            { expiresIn: '2h' }
+        )
+
+        res.status(201).json({message: 'User created successfully', token});
     }
     catch (err){
         console.error(err);

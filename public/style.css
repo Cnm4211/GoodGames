@@ -251,7 +251,7 @@ html, body{
 
 th{
   color: black;
-  background-color: grey;
+  background-color: rgb(177, 177, 177);
 }
 
 .filterButtons {

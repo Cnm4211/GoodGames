@@ -203,6 +203,10 @@
     function renderTable(games) {
         const tableBody = document.getElementById('tableBody');
         tableBody.innerHTML = '';
+        if (!games || games.length === 0){
+            tableBody.innerHTML = '<tr><td colspan="8">Your list is empty.</td></tr>';
+            return;
+        }
         let number = 1;
         games.forEach(game => {
             const row = document.createElement('tr');

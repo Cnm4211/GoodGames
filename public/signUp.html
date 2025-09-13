@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Good Games</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
-        
-        <h1 style="margin-bottom: 30px"><a href="Home.html" class="home-link"> Good Games </a></h1>
-        
+        <a href="Home.html" class="home-link">
+            <p class="title">
+                <span class="bigLetter">G</span>ood
+                <span class="bigLetter">G</span>ame
+                <span class="bigLetter">S</span>
+            </p>
+        </a>
         <h2>Sign Up</h2>
-        <form action="/signUp" method="POST">
+        <form id="signUpForm">
             <div class="input-group">
                 <label for="username">Username: </label>
                 <input type="text" id="username" name="username" required>
@@ -25,11 +31,37 @@
                 <label for="password">Password: </label>
                 <input type="password" id="password" name="password" required>
             </div>
-
-            <button type="submit" class="auth-button"> Sign Up </button>
-            
+            <button type="submit" class="auth-button" id="signUpButton"> Sign Up </button>
             <p>Already have an account? <a href="signIn.html"> Sign In </a></p>
         </form>
     </div>
 </body>
+<script>
+    document.getElementById('signUpForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const res = await fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await res.json();
+
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+            window.location.href = 'Home.html';
+        }
+        else {
+            alert(data.message || 'Sign up failed');
+        }
+    });
+</script>
+
 </html>
