@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Good Games</title>
-    <link rel="stylesheet" href="search.css" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
@@ -23,7 +23,9 @@
             <a href="signIn.html"> <button class="auth-button" id="signInButton">Sign In</button> </a>
             <a href="signUp.html"> <button class="auth-button" id="signUpButton">Sign Up</button> </a>
             <a href="myList.html"> <button class="auth-button" id="myListButton" style="display:none; width: 150px; ">My
-                    List </button> </a>
+                    List
+                </button> </a>
+            <button class="auth-button" id="logoutButton" style="display:none;">Logout</button>
         </div>
 
         <div class="sideMenu" id="sideMenu">
@@ -60,23 +62,43 @@
         </div>
 
 
-        <!-- Search -->
-        <div class="searchContainer">
-            <h3 class="searchTitle">Search for a Game!</h3>
-            <div class="search-controls">
-                <input type="text" class="searchBar" id="searchBar" placeholder="Enter a game name..." />
-                <button class="searchButton" id="searchButton">Search</button>
+        <!--
+    Friends list
+    Top 10
+    Profile Picture
+    Profile Info
+
+    info:
+    favorite genre
+    member since
+    games played
+
+    -->
+
+        <div class="profileContainer">
+            <h3 class="profileName" id="profileName"></h3>
+            <div class="profilePicture">
+                <img src="default-profile.jpg" alt="Profile Picture" class="profileImg">
+            </div>
+
+            <div class="profileInfo">
+                <p class="infoItem" id="username"><strong>Username:</strong> </p>
+                <p class="infoItem" id="memberSince"><strong>Member Since:</strong> </p>
+                <p class="infoItem" id="gamesPlayed"><strong>Games Played: </strong> </p>
+                <p class="infoItem" id="favoriteGenre"><strong>Favorite Genre:</strong> </p>
+            </div>
+
+            <div class="topTen" id="topTen">
+                <h3 class="topTenTitle">Top 10 Games</h3>
+
             </div>
         </div>
 
-
-        <div class="results" id="results">
-
-        </div>
+    </div>
     </div>
 </body>
 
-<script src="search.js">
+<script src="profile.js">
 
 </script>
 

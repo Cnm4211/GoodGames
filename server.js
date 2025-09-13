@@ -7,6 +7,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import jwt from 'jsonwebtoken';
 import myListRoutes from './myList.js';
+import profileRoutes from './profileEndPoint.js';
+
 
 dotenv.config();
 
@@ -19,6 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use('/myList', myListRoutes);
+app.use('/profile', profileRoutes);
 
 const RAWG_BASE_URL = 'https://api.rawg.io/api';
 

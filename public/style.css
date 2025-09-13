@@ -270,3 +270,40 @@ th{
   cursor: pointer;
   font-size: 16px;
 }
+
+.profileContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 2px solid grey;
+  width: 800px;
+  height: 800px;
+  padding-left: 25px; 
+}
+
+.profileName{
+  align-self: center;
+  text-align: center;
+  font-size: 20px;
+  font-family: "Tiny5", sans-serif;
+  color: cyan;
+  margin-top: 20px;
+}
+
+.profilePicture{
+  position: relative;
+}
+
+.profileImg{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.topTen{
+  position: relative;
+  align-self: center;
+  text-align: center;
+}
