@@ -208,7 +208,7 @@
             return;
         }
         let number = 1;
-        games.forEach(game => {
+        games.forEach((game, idx) => {
             const row = document.createElement('tr');
 
             const numberCell = document.createElement('td');
@@ -254,14 +254,72 @@
 
             //Score
             const scoreCell = document.createElement('td');
-            scoreCell.textContent = game.score || ''; //placeholder until i figure it out
+            const scoreValue = game.score || "-";
+            scoreCell.innerHTML = `
+                <span class="score-clickable" style="cursor:pointer; color:cyan;" data-idx="${idx}">${scoreValue}</span>
+                <select class="score-dropdown" style="display:none; margin-left:5px;">
+                    <option value="">-</option>
+                    ${[...Array(10).keys()].map(i => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+                </select>
+            `;
             row.appendChild(scoreCell);
 
 
             tableBody.appendChild(row);
             number++;
         });
+
+        document.querySelectorAll('.score-clickable').forEach(span => {
+            span.addEventListener('click', function () {
+                const parentTd = this.parentElement;
+                const dropdown = parentTd.querySelector('.score-dropdown');
+                dropdown.style.display = 'inline-block';
+                dropdown.focus();
+            });
+        });
+
+        // Add change event listeners to all dropdowns
+        document.querySelectorAll('.score-dropdown').forEach(dropdown => {
+            dropdown.addEventListener('change', async function () {
+                const parentTd = this.parentElement;
+                const span = parentTd.querySelector('.score-clickable');
+                span.textContent = this.value || "-";
+                this.style.display = 'none';
+
+                // Get the row index and game id
+                const idx = span.getAttribute('data-idx');
+                const game = gamesList[idx];
+                const token = localStorage.getItem('token');
+
+                try {
+                    const res = await fetch('/myList/updateScore', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            id: game.id, // assuming your game object has an 'id' field
+                            score: this.value ? parseInt(this.value) : null
+                        })
+                    });
+                    const result = await res.json();
+                    if (!res.ok) {
+                        alert(result.message || 'Failed to update score.');
+                    }
+                }
+                catch (err) {
+                    console.error(err);
+                    alert('An error occurred while updating the score.');
+                }
+            });
+            dropdown.addEventListener('blur', function () {
+                setTimeout(() => { this.style.display = 'none'; }, 200);
+            });
+        });
     }
+
+
 
     document.addEventListener('DOMContentLoaded', (event) => {
         getMyList();

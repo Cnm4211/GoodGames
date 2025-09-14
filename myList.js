@@ -45,6 +45,22 @@ router.get('/', authenticate, async (req, res) => {
     }
 });
 
+router.post('/updateScore', authenticate, async (req, res) => {
+        const { id, score } = req.body;
+    if (!id) return res.status(400).json({ message: 'Missing game id' });
+
+    try {
+        await pool.query(
+            'UPDATE gamesList SET score = ? WHERE id = ? AND user_id = ?',
+            [score, id, req.user.userId]
+        );
+        res.status(200).json({ message: 'Score updated successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to update score', error: err.message });
+    }
+});
+
 export default router;
 
 /*
