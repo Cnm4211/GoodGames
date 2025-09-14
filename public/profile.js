@@ -76,7 +76,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('favoriteGenre').innerHTML = `<strong>Favorite Genre:</strong> ${favoriteGenre.favoriteGenre.genre}`;
       }
     }
-    catch(err){
+    catch (err) {
       console.error(err);
     }
   }
@@ -92,3 +92,67 @@ document.getElementById('logoutButton').addEventListener('click', () => {
   localStorage.removeItem('token');
   window.location.href = 'Home.html';
 });
+
+
+async function getTopTen() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('You must be logged in to view your list.');
+    return;
+  }
+
+  try {
+    const res = await fetch('/profile/topTen', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${token}`
+      }
+    });
+
+    const result = await res.json();
+    console.log("Top Ten Result:", result); // Debugging line
+    const tableBody = document.getElementById('tableBody');
+
+    if (res.ok) {
+      renderTable(result);
+    }
+    else {
+      tableBody.innerHTML = 'Failed to load your list.';
+    }
+  }
+  catch (err) {
+    console.error(err);
+    alert('An error occurred while fetching your list.');
+  }
+}
+
+function renderTable(games) {
+  const tableBody = document.getElementById('tableBody');
+  tableBody.innerHTML = '';
+  if (!games || games.length === 0) {
+    tableBody.innerHTML = '<tr><td colspan="8">Your list is empty.</td></tr>';
+    return;
+  }
+  games.forEach(game => {
+    const row = document.createElement('tr');
+
+    const numberCell = document.createElement('td');
+    numberCell.textContent = game.position;
+    row.appendChild(numberCell);
+
+    // Title
+    const titleCell = document.createElement('td');
+    titleCell.textContent = game.game_name || '';
+    row.appendChild(titleCell);
+
+    //Score
+    const scoreCell = document.createElement('td');
+    scoreCell.textContent = game.score; //placeholder until i figure it out
+    row.appendChild(scoreCell);
+
+
+    tableBody.appendChild(row);
+  });
+}
+getTopTen();

@@ -85,4 +85,16 @@ router.get('/favoriteGenre', authenticateToken, async (req, res) => {
     }
 });
 
+router.get('/topTen', authenticateToken, async (req, res) => {
+    try {
+        const [rows] = await pool.query(
+            'SELECT * FROM top_ten WHERE user_id = ?',
+            [req.user.userId]
+        );
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 export default router;
