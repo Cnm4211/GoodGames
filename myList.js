@@ -15,7 +15,7 @@ function authenticate(req, res, next) {
         req.user = user;
         next();
     });
-}
+} 
 
 router.post('/', authenticate, async (req, res) => {
     const { game_name, image, genre, platforms, release_year, rating } = req.body;
