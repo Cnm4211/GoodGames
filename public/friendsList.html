@@ -7,6 +7,42 @@
     <title>Good Games</title>
     <link rel="stylesheet" href="search.css" />
 </head>
+<style>
+    /* Tab Menu Styling */
+    .tab-menu {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        gap: 20px;
+    }
+
+    .tab-button {
+        background: #333;
+        color: cyan;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .tab-button.active {
+        background: cyan;
+        color: black;
+        font-weight: bold;
+    }
+
+    .tab-content {
+        display: none;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+</style>
 
 <body>
     <div class="container">
@@ -27,6 +63,7 @@
             <button class="auth-button" id="logoutButton" style="display:none;">Logout</button>
         </div>
 
+        <!-- Side Menu -->
         <div class="sideMenu" id="sideMenu">
             <div class="hamburger" id="hamburger">
                 <div></div>
@@ -44,7 +81,7 @@
                         <a href="Home.html" class="menuItem" id="homeLink">Home</a>
                     </div>
                     <div class="sideMenuItem">
-                        <a href="search.html" class="menuItem" id="myListLink">Search</a>
+                        <a href="search.html" class="menuItem" id="searchLink">Search</a>
                     </div>
                     <div class="sideMenuItem">
                         <a href="friends.html" class="menuItem" id="friendsLink">Find Friends</a>
@@ -53,23 +90,35 @@
                         <a href="myList.html" class="menuItem" id="myListLink">My List</a>
                     </div>
                     <div class="sideMenuItem">
-                        <a href="profile.html" class="menuItem" id="myListLink">My Profile</a>
+                        <a href="profile.html" class="menuItem" id="profileLink">My Profile</a>
                     </div>
                     <div class="sideMenuItem">
-                        <a href="friendsList.html" class="menuItem" id="myFriendsLink">My Friends</a>
+                        <a href="friendsList.html" class="menuItem" id="friendsListLink">My Friends</a>
                     </div>
                     <div class="sideMenuItem">
                         <a href="about.html" class="menuItem" id="aboutLink">About</a>
                     </div>
                 </div>
             </div>
-
         </div>
 
-
-        <div class="results" id="results">
-
+        <div class="tab-menu">
+            <button class="tab-button active" data-tab="currentFriends" id="currentTab">Current Friends</button>
+            <button class="tab-button" data-tab="pendingRequests" id="pendingTab">Pending Requests</button>
         </div>
+
+        <div id="currentFriends" class="tab-content active">
+            <h2>My Friends</h2>
+            <div id="currentResults">
+            </div>
+        </div>
+
+        <div id="pendingRequests" class="tab-content">
+            <h2>Pending Friend Requests</h2>
+            <div id="pendingResults">
+            </div>
+        </div>
+
     </div>
 </body>
 

@@ -127,7 +127,7 @@ router.get('/', authenticateToken, async (req, res) => {
             [req.user.userId]
         );
 
-        res.json({ friends: rows });
+        res.json({ results: rows });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Failed to fetch friends', error: err.message });
