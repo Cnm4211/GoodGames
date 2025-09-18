@@ -21,23 +21,26 @@
   }
 
   window.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    const myListButton = document.getElementById('myListButton');
-    const signInButton = document.getElementById('signInButton');
-    const signUpButton = document.getElementById('signUpButton');
-    const sideMenuMyList = document.getElementById('myListItem');
-    if (isTokenValid(token)) {
-      myListButton.style.display = 'block';
-      signInButton.style.display = 'none';
-      signUpButton.style.display = 'none';
-      sideMenuMyList.style.display = 'block';
-    }
-    else {
-      myListButton.style.display = 'none';
-      signInButton.style.display = 'block';
-      signUpButton.style.display = 'block';
-    }
-  })
+  const token = localStorage.getItem('token');
+  const myListButton = document.getElementById('myListButton');
+  const signInButton = document.getElementById('signInButton');
+  const signUpButton = document.getElementById('signUpButton');
+  const sideMenuMyList = document.getElementById('myListItem');
+  const logoutButton = document.getElementById('logoutButton');
+  if (isTokenValid(token)) {
+    myListButton.style.display = 'block';
+    signInButton.style.display = 'none';
+    signUpButton.style.display = 'none';
+    sideMenuMyList.style.display = 'block';
+    logoutButton.style.display = 'block';
+  }
+  else {
+    myListButton.style.display = 'none';
+    signInButton.style.display = 'block';
+    signUpButton.style.display = 'block';
+    logoutButton.style.display = 'none';
+  }
+})
 
   document.getElementById('searchBar').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {

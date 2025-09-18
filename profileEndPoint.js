@@ -23,6 +23,7 @@ function authenticateToken(req, res, next) {
 }
 
 
+//profile routes
 router.get('/me', authenticateToken, async (req, res) => {
     try {
         const [rows] = await pool.query(
@@ -96,5 +97,7 @@ router.get('/topTen', authenticateToken, async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+
 
 export default router;

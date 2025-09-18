@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Good Games</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="search.css" />
 </head>
 
 <body>
@@ -23,8 +23,7 @@
             <a href="signIn.html"> <button class="auth-button" id="signInButton">Sign In</button> </a>
             <a href="signUp.html"> <button class="auth-button" id="signUpButton">Sign Up</button> </a>
             <a href="myList.html"> <button class="auth-button" id="myListButton" style="display:none; width: 150px; ">My
-                    List
-                </button> </a>
+                    List </button> </a>
             <button class="auth-button" id="logoutButton" style="display:none;">Logout</button>
         </div>
 
@@ -68,54 +67,13 @@
         </div>
 
 
-        <!--
-    Friends list
-    Top 10
-    Profile Picture
-    Profile Info
+        <div class="results" id="results">
 
-    info:
-    favorite genre
-    member since
-    games played
-
-    -->
-
-        <div class="profileContainer">
-            <h3 class="profileName" id="profileName"></h3>
-            <div class="profilePicture">
-                <img src="default-profile.jpg" alt="Profile Picture" class="profileImg">
-            </div>
-
-            <div class="profileInfo">
-                <p class="infoItem" id="username"><strong>Username:</strong> </p>
-                <p class="infoItem" id="memberSince"><strong>Member Since:</strong> </p>
-                <p class="infoItem" id="gamesPlayed"><strong>Games Played: </strong> </p>
-                <p class="infoItem" id="favoriteGenre"><strong>Favorite Genre:</strong> </p>
-            </div>
-
-            <div class="topTen" id="topTen">
-                <h3 class="topTenTitle">Top 10 Games</h3>
-                <table id="myTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 30px;">#</th>
-                            <th>Title</th>
-                            <th>Score</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-
-                    </tbody>
-                </table>
-            </div>
         </div>
-
-    </div>
     </div>
 </body>
 
-<script src="profile.js">
+<script src="friendsList.js">
 
 </script>
 

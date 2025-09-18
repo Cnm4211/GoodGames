@@ -19,6 +19,14 @@
         </p>
 
         <!-- Auth Buttons -->
+        <div class="auth-buttons">
+            <a href="signIn.html"> <button class="auth-button" id="signInButton">Sign In</button> </a>
+            <a href="signUp.html"> <button class="auth-button" id="signUpButton">Sign Up</button> </a>
+            <a href="myList.html"> <button class="auth-button" id="myListButton" style="display:none; width: 150px; ">My
+                    List
+                </button> </a>
+            <button class="auth-button" id="logoutButton" style="display:none;">Logout</button>
+        </div>
 
         <div class="sideMenu" id="sideMenu">
             <div class="hamburger" id="hamburger">
@@ -39,11 +47,17 @@
                     <div class="sideMenuItem">
                         <a href="search.html" class="menuItem" id="myListLink">Search</a>
                     </div>
+                    <div class="sideMenuItem">
+                        <a href="friends.html" class="menuItem" id="friendsLink">Find Friends</a>
+                    </div>
                     <div class="sideMenuItem" id="myListItem" style="display: none;">
                         <a href="myList.html" class="menuItem" id="myListLink">My List</a>
                     </div>
                     <div class="sideMenuItem">
                         <a href="profile.html" class="menuItem" id="myListLink">My Profile</a>
+                    </div>
+                    <div class="sideMenuItem">
+                        <a href="friendsList.html" class="menuItem" id="myFriendsLink">My Friends</a>
                     </div>
                     <div class="sideMenuItem">
                         <a href="about.html" class="menuItem" id="aboutLink">About</a>
@@ -387,6 +401,28 @@
         const sideMenuMyList = document.getElementById('myListItem');
         if (isTokenValid(token)) {
             sideMenuMyList.style.display = 'block';
+        }
+    })
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+        const myListButton = document.getElementById('myListButton');
+        const signInButton = document.getElementById('signInButton');
+        const signUpButton = document.getElementById('signUpButton');
+        const sideMenuMyList = document.getElementById('myListItem');
+        const logoutButton = document.getElementById('logoutButton');
+        if (isTokenValid(token)) {
+            myListButton.style.display = 'block';
+            signInButton.style.display = 'none';
+            signUpButton.style.display = 'none';
+            sideMenuMyList.style.display = 'block';
+            logoutButton.style.display = 'block';
+        }
+        else {
+            myListButton.style.display = 'none';
+            signInButton.style.display = 'block';
+            signUpButton.style.display = 'block';
+            logoutButton.style.display = 'none';
         }
     })
 </script>
