@@ -186,4 +186,20 @@ router.get('/users/search', authenticateToken, async (req, res) => {
     }
 });
 
+//fetch friends profile
+router.get('/:friendId', authenticateToken, async (req, res) => {
+    try{
+        const {friendId} = req.params;
+
+        const [rows] = await pool.query(
+            
+        )
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({ message: 'Failed to fetch friend profile', error: err.message });
+    }
+    
+});
+
 export default router;

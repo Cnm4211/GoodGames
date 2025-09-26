@@ -37,38 +37,27 @@ window.addEventListener('DOMContentLoaded', async () => {
     sideMenuMyList.style.display = 'block';
     logoutButton.style.display = 'block';
     try {
-      const response = await fetch('/profile/me', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!response.ok) {
-        throw new Error('Failed to fetch profile data');
-      }
-      const response2 = await fetch('/profile/mygames', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!response2.ok) {
-        throw new Error('Failed to fetch profile data');
-      }
-      const response3 = await fetch('/profile/favoriteGenre', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!response3.ok) {
-        throw new Error('Failed to fetch profile data');
-      }
-      const user = await response.json();
-      const mygames = await response2.json();
-      const favoriteGenre = await response3.json();
-      console.log(favoriteGenre);
-      profileName.textContent = user.user.username;
+      const userId = new URLSearchParams(window.location.search).get("id") || JSON.parse(atob(token.split('.')[1])).userId;
 
+      const [userRes, gamesRes, genreRes] = await Promise.all([
+        fetch(`/profile/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(`/profile/${userId}/mygames`, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(`/profile/${userId}/favoriteGenre`, { headers: { 'Authorization': `Bearer ${token}` } }),
+      ]);
+
+      if (!userRes.ok || !gamesRes.ok || !genreRes.ok) {
+        throw new Error("Failed to fetch profile data");
+      }
+
+      const user = await userRes.json();
+      const mygames = await gamesRes.json();
+      const favoriteGenre = await genreRes.json();
+
+      // populate UI
+      profileName.textContent = user.user.username;
       document.getElementById('username').innerHTML = `<strong>Username:</strong> ${user.user.username}`;
       document.getElementById('memberSince').innerHTML = `<strong>Member Since:</strong> ${new Date(user.user.created_at).toLocaleDateString()}`;
+
       if (mygames.gameCount !== undefined) {
         document.getElementById('gamesPlayed').innerHTML = `<strong>Games Played:</strong> ${mygames.gameCount['Count(*)']}`;
       }
@@ -96,13 +85,14 @@ document.getElementById('logoutButton').addEventListener('click', () => {
 
 async function getTopTen() {
   const token = localStorage.getItem('token');
+  const userId = new URLSearchParams(window.location.search).get("id") || JSON.parse(atob(token.split('.')[1])).userId;
   if (!token) {
     alert('You must be logged in to view your list.');
     return;
   }
 
   try {
-    const res = await fetch('/profile/topTen', {
+    const res = await fetch(`/profile/${userId}/topTen`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

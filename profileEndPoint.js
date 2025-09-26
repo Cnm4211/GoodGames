@@ -24,11 +24,12 @@ function authenticateToken(req, res, next) {
 
 
 //profile routes
-router.get('/me', authenticateToken, async (req, res) => {
+router.get('/:userId', authenticateToken, async (req, res) => {
     try {
+        const {userId} = req.params;
         const [rows] = await pool.query(
             'SELECT username, email, created_at FROM users WHERE id = ?',
-            [req.user.userId]
+            [userId]
         );
 
         if (rows.length === 0) {
@@ -42,11 +43,12 @@ router.get('/me', authenticateToken, async (req, res) => {
     }
 });
 
-router.get('/mygames', authenticateToken, async (req, res) => {
+router.get('/:userId/mygames', authenticateToken, async (req, res) => {
+    const {userId} = req.params;
     try {
         const [rows] = await pool.query(
             'SELECT Count(*) FROM gamesList WHERE user_id = ?',
-            [req.user.userId]
+            [userId]
         );
 
         res.json({ gameCount: rows[0] });
@@ -58,7 +60,8 @@ router.get('/mygames', authenticateToken, async (req, res) => {
     }
 });
 
-router.get('/favoriteGenre', authenticateToken, async (req, res) => {
+router.get('/:userId/favoriteGenre', authenticateToken, async (req, res) => {
+    const {userId} = req.params;
     try {
         const [rows] = await pool.query(
             `WITH split_genres AS (
@@ -76,7 +79,7 @@ router.get('/favoriteGenre', authenticateToken, async (req, res) => {
             GROUP BY single_genre
             ORDER BY COUNT(*) DESC
             LIMIT 1`,
-            [req.user.userId]
+            [userId]
         );
 
         res.json({ favoriteGenre: rows[0] || null });
@@ -86,11 +89,13 @@ router.get('/favoriteGenre', authenticateToken, async (req, res) => {
     }
 });
 
-router.get('/topTen', authenticateToken, async (req, res) => {
+router.get('/:userId/topTen', authenticateToken, async (req, res) => {
+    const {userId} = req.params;
+    console.log("top ten param: ", userId);
     try {
         const [rows] = await pool.query(
             'SELECT * FROM top_ten WHERE user_id = ?',
-            [req.user.userId]
+            [userId]
         );
         res.json(rows);
     } catch (err) {

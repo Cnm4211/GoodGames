@@ -27,7 +27,8 @@
         transition: 0.3s;
     }
 
-    .tab-button.active {
+    .tab-button.active,
+    .tab-button:hover {
         background: cyan;
         color: black;
         font-weight: bold;
@@ -42,6 +43,13 @@
     .tab-content.active {
         display: block;
     }
+
+    .friend-link {
+        color: cyan;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
 </style>
 
 <body>
@@ -84,7 +92,7 @@
                         <a href="search.html" class="menuItem" id="searchLink">Search</a>
                     </div>
                     <div class="sideMenuItem">
-                        <a href="friends.html" class="menuItem" id="friendsLink">Find Friends</a>
+                        <a href="seachFriends.html" class="menuItem" id="friendsLink">Find Friends</a>
                     </div>
                     <div class="sideMenuItem" id="myListItem" style="display: none;">
                         <a href="myList.html" class="menuItem" id="myListLink">My List</a>

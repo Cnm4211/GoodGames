@@ -48,6 +48,11 @@
     }
   })
 
+  document.getElementById('logoutButton').addEventListener('click', () => {
+  localStorage.removeItem('token');
+  window.location.href = 'Home.html';
+});
+
   document.getElementById('searchButton').addEventListener('click', async () => {
     const query = document.getElementById('searchBar').value;
     const res = await fetch(`/games?search=${encodeURIComponent(query)}`);

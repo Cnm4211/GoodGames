@@ -43,6 +43,11 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 })
 
+document.getElementById('logoutButton').addEventListener('click', () => {
+    localStorage.removeItem('token');
+    window.location.href = 'Home.html';
+});
+
 async function acceptFriendRequest(friendId) {
     const token = localStorage.getItem('token');
     const res = await fetch(`/friends/accept/${friendId}`, {
@@ -51,6 +56,20 @@ async function acceptFriendRequest(friendId) {
     });
     const data = await res.json();
     alert(data.message);
+    loadPendingRequests();
+}
+
+async function removeFriend(friendId) {
+    const result = confirm("Are you sure you want to remove this friend?");
+    if (!result) return;
+    const token = localStorage.getItem('token');
+    const res = await fetch(`/friends/remove/${friendId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    alert(data.message);
+    loadCurrentFriends();
 }
 
 async function loadPendingRequests() {
@@ -94,6 +113,7 @@ async function loadPendingRequests() {
 
         const plus = document.createElement('button');
         plus.textContent = 'Accept Request';
+        plus.className = 'tab-button';
         plus.addEventListener('click', async () => {
             acceptFriendRequest(user.id);
         });
@@ -108,17 +128,18 @@ async function loadPendingRequests() {
 async function loadCurrentFriends() {
     const token = localStorage.getItem('token');
     if (!isTokenValid(token)) {
-        alert('Please sign in to add to your list');
+        alert('Please sign in to view your friends');
         return;
     }
+
     const res = await fetch(`/friends`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     });
+
     const data = await res.json();
     console.log(data);
-
 
     const resultsDiv = document.getElementById('currentResults');
     resultsDiv.innerHTML = '';
@@ -129,31 +150,35 @@ async function loadCurrentFriends() {
     }
 
     data.results.forEach(user => {
-        console.log("test");
         const itemDiv = document.createElement('div');
         itemDiv.className = 'result-item';
 
-        /*const img = document.createElement('img');
-        img.src = game.background_image || 'https://via.placeholder.com/100';
-        img.alt = game.name;
-        img.style.maxWidth = '100px';
-        img.style.maxHeight = '100px';
-        */
+        // clickable username that links to profile
         const textDiv = document.createElement('div');
-        const p = document.createElement('p');
-        p.textContent = `${user.username}`;
-        textDiv.appendChild(p);
+        const link = document.createElement('a');
+        link.href = `profile.html?id=${user.id}`;
+        link.textContent = user.username;
+        link.className = 'friend-link'; // optional CSS class
+        textDiv.appendChild(link);
 
-        const plus = document.createElement('button');
-        plus.textContent = 'Remove Friend';
-        plus.addEventListener('click', async () => {
-            //acceptFriendRequest(user.id);
-            console.log("Add Remove Friends");
+        // remove friend button
+        const removeFriendButton = document.createElement('button');
+        removeFriendButton.className = 'tab-button';
+        removeFriendButton.textContent = 'Remove Friend';
+
+        removeFriendButton.addEventListener('mouseenter', () => {
+            removeFriendButton.classList.add('active');
+        });
+        removeFriendButton.addEventListener('mouseleave', () => {
+            removeFriendButton.classList.remove('active');
         });
 
-        //itemDiv.appendChild(img);
+        removeFriendButton.addEventListener('click', async () => {
+            removeFriend(user.id);
+        });
+
         itemDiv.appendChild(textDiv);
-        itemDiv.appendChild(plus);
+        itemDiv.appendChild(removeFriendButton);
         resultsDiv.appendChild(itemDiv);
     });
 }

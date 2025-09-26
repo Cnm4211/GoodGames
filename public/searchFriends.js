@@ -48,6 +48,10 @@ document.getElementById('searchBar').addEventListener('keydown', function (e) {
     }
 })
 
+document.getElementById('logoutButton').addEventListener('click', () => {
+  localStorage.removeItem('token');
+  window.location.href = 'Home.html';
+});
 
 document.getElementById('searchButton').addEventListener('click', async () => {
     const query = document.getElementById('searchBar').value;
@@ -90,6 +94,7 @@ document.getElementById('searchButton').addEventListener('click', async () => {
 
         const plus = document.createElement('button');
         plus.textContent = 'Add Friend';
+        plus.className = 'tab-button';
         plus.addEventListener('click', async () => {
             try {
                 const res = await fetch(`/friends/add/${user.id}`, {
