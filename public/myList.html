@@ -183,13 +183,14 @@
     gamesList = [];
     async function getMyList() {
         const token = localStorage.getItem('token');
+        const userId = new URLSearchParams(window.location.search).get("id") || JSON.parse(atob(token.split('.')[1])).userId;
         if (!token) {
             alert('You must be logged in to view your list.');
             return;
         }
 
         try {
-            const res = await fetch('/myList', {
+            const res = await fetch(`/myList/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

@@ -29,7 +29,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   const sideMenuMyList = document.getElementById('myListItem');
   const logoutButton = document.getElementById('logoutButton');
   const profileName = document.getElementById('profileName');
-  console.log(JSON.parse(atob(token.split('.')[1])));
+  const friendListButton = document.getElementById('friendListButton');
+  
   if (isTokenValid(token)) {
     myListButton.style.display = 'block';
     signInButton.style.display = 'none';
@@ -38,6 +39,10 @@ window.addEventListener('DOMContentLoaded', async () => {
     logoutButton.style.display = 'block';
     try {
       const userId = new URLSearchParams(window.location.search).get("id") || JSON.parse(atob(token.split('.')[1])).userId;
+
+      if (userId == JSON.parse(atob(token.split('.')[1])).userId) {
+        friendListButton.style.display = 'none';
+      }
 
       const [userRes, gamesRes, genreRes] = await Promise.all([
         fetch(`/profile/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } }),
@@ -55,6 +60,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
       // populate UI
       profileName.textContent = user.user.username;
+      friendListButton.textContent = `${user.user.username}'s List`;
       document.getElementById('username').innerHTML = `<strong>Username:</strong> ${user.user.username}`;
       document.getElementById('memberSince').innerHTML = `<strong>Member Since:</strong> ${new Date(user.user.created_at).toLocaleDateString()}`;
 
@@ -81,6 +87,12 @@ document.getElementById('logoutButton').addEventListener('click', () => {
   localStorage.removeItem('token');
   window.location.href = 'Home.html';
 });
+
+document.getElementById('friendListButton').addEventListener('click', () => {
+  const userId = new URLSearchParams(window.location.search).get("id") || JSON.parse(atob(token.split('.')[1])).userId;
+  window.location.href = `myList.html?id=${userId}`;
+});
+
 
 
 async function getTopTen() {

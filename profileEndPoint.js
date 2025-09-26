@@ -91,7 +91,6 @@ router.get('/:userId/favoriteGenre', authenticateToken, async (req, res) => {
 
 router.get('/:userId/topTen', authenticateToken, async (req, res) => {
     const {userId} = req.params;
-    console.log("top ten param: ", userId);
     try {
         const [rows] = await pool.query(
             'SELECT * FROM top_ten WHERE user_id = ?',

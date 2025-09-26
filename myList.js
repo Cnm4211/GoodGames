@@ -33,11 +33,12 @@ router.post('/', authenticate, async (req, res) => {
     }
 });
 
-router.get('/', authenticate, async (req, res) => {
+router.get('/:userId', authenticate, async (req, res) => {
     try {
+        const {userId} = req.params;
         const [rows] = await pool.query(
             'SELECT * FROM gamesList WHERE user_id = ?',
-            [req.user.userId]
+            [userId]
         );
         res.json(rows);
     } catch (err) {
