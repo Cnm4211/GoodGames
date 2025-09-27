@@ -47,7 +47,7 @@ router.get('/:userId/mygames', authenticateToken, async (req, res) => {
     const {userId} = req.params;
     try {
         const [rows] = await pool.query(
-            'SELECT Count(*) FROM gamesList WHERE user_id = ?',
+            'SELECT Count(*) FROM gameslist WHERE user_id = ?',
             [userId]
         );
 
@@ -67,7 +67,7 @@ router.get('/:userId/favoriteGenre', authenticateToken, async (req, res) => {
             `WITH split_genres AS (
                 SELECT user_id,
                     TRIM(REGEXP_SUBSTR(genre, '[^,]+', 1, n)) AS single_genre
-                FROM gamesList
+                FROM gameslist
                 CROSS JOIN (
                     SELECT 1 AS n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5
                 ) AS numbers

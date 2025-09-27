@@ -22,7 +22,7 @@ router.post('/', authenticate, async (req, res) => {
 
     try {
         await pool.query(
-            'INSERT INTO gamesList (user_id, game_name, image, genre, platforms, release_year, rating) VALUES (?, ?, ?, ? ,? ,?, ?)',
+            'INSERT INTO gameslist (user_id, game_name, image, genre, platforms, release_year, rating) VALUES (?, ?, ?, ? ,? ,?, ?)',
             [req.user.userId, game_name, image, genre, platforms, release_year, rating]
         );
         res.status(200).json({ message: 'Game added to your list' });
@@ -37,7 +37,7 @@ router.get('/:userId', authenticate, async (req, res) => {
     try {
         const {userId} = req.params;
         const [rows] = await pool.query(
-            'SELECT * FROM gamesList WHERE user_id = ?',
+            'SELECT * FROM gameslist WHERE user_id = ?',
             [userId]
         );
         res.json(rows);
@@ -52,7 +52,7 @@ router.post('/updateScore', authenticate, async (req, res) => {
 
     try {
         await pool.query(
-            'UPDATE gamesList SET score = ? WHERE id = ? AND user_id = ?',
+            'UPDATE gameslist SET score = ? WHERE id = ? AND user_id = ?',
             [score, id, req.user.userId]
         );
         res.status(200).json({ message: 'Score updated successfully' });

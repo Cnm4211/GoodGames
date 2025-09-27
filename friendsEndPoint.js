@@ -34,7 +34,7 @@ router.post('/add/:friendId', authenticateToken, async (req, res) => {
 
         // Check if relationship already exists
         const [existing] = await pool.query(
-            'SELECT status FROM friendsList WHERE user_id=? AND friend_id=?',
+            'SELECT status FROM friendslist WHERE user_id=? AND friend_id=?',
             [req.user.userId, friendId]
         );
 
@@ -51,7 +51,7 @@ router.post('/add/:friendId', authenticateToken, async (req, res) => {
         }
 
         await pool.query(
-            'INSERT INTO friendsList (user_id, friend_id, status) VALUES (?, ?, "pending")',
+            'INSERT INTO friendslist (user_id, friend_id, status) VALUES (?, ?, "pending")',
             [req.user.userId, friendId]
         );
 
@@ -68,13 +68,13 @@ router.post('/accept/:friendId', authenticateToken, async (req, res) => {
 
         // Update request sender row
         await pool.query(
-            'UPDATE friendsList SET status="accepted" WHERE user_id=? AND friend_id=?',
+            'UPDATE friendslist SET status="accepted" WHERE user_id=? AND friend_id=?',
             [friendId, req.user.userId]
         );
 
         // Ensure reciprocal row exists
         await pool.query(
-            'INSERT INTO friendsList (user_id, friend_id, status) VALUES (?, ?, "accepted") ON DUPLICATE KEY UPDATE status="accepted"',
+            'INSERT INTO friendslist (user_id, friend_id, status) VALUES (?, ?, "accepted") ON DUPLICATE KEY UPDATE status="accepted"',
             [req.user.userId, friendId]
         );
 
@@ -90,7 +90,7 @@ router.post('/reject/:friendId', authenticateToken, async (req, res) => {
         const { friendId } = req.params;
 
         await pool.query(
-            'UPDATE friendsList SET status="rejected" WHERE user_id=? AND friend_id=?',
+            'UPDATE friendslist SET status="rejected" WHERE user_id=? AND friend_id=?',
             [friendId, req.user.userId]
         );
 
@@ -106,7 +106,7 @@ router.delete('/remove/:friendId', authenticateToken, async (req, res) => {
         const { friendId } = req.params;
 
         await pool.query(
-            'DELETE FROM friendsList WHERE (user_id=? AND friend_id=?) OR (user_id=? AND friend_id=?)',
+            'DELETE FROM friendslist WHERE (user_id=? AND friend_id=?) OR (user_id=? AND friend_id=?)',
             [req.user.userId, friendId, friendId, req.user.userId]
         );
 
@@ -121,7 +121,7 @@ router.get('/', authenticateToken, async (req, res) => {
     try {
         const [rows] = await pool.query(
             `SELECT u.id, u.username, u.email, f.created_at
-             FROM friendsList f
+             FROM friendslist f
              JOIN users u ON f.friend_id = u.id
              WHERE f.user_id = ? AND f.status="accepted"`,
             [req.user.userId]
@@ -138,7 +138,7 @@ router.get('/pending', authenticateToken, async (req, res) => {
     try {
         const [incoming] = await pool.query(
             `SELECT u.id, u.username, u.email, f.created_at
-             FROM friendsList f
+             FROM friendslist f
              JOIN users u ON f.user_id = u.id
              WHERE f.friend_id=? AND f.status="pending"`,
             [req.user.userId]
@@ -155,7 +155,7 @@ router.get('/outgoing', authenticateToken, async (req, res) => {
     try {
         const [outgoing] = await pool.query(
             `SELECT u.id, u.username, u.email, f.created_at
-             FROM friendsList f
+             FROM friendslist f
              JOIN users u ON f.friend_id = u.id
              WHERE f.user_id=? AND f.status="pending"`,
             [req.user.userId]
@@ -184,22 +184,6 @@ router.get('/users/search', authenticateToken, async (req, res) => {
         console.error(err);
         res.status(500).json({ message: 'Failed to search users', error: err.message });
     }
-});
-
-//fetch friends profile
-router.get('/:friendId', authenticateToken, async (req, res) => {
-    try{
-        const {friendId} = req.params;
-
-        const [rows] = await pool.query(
-            
-        )
-    }
-    catch(err){
-        console.error(err);
-        res.status(500).json({ message: 'Failed to fetch friend profile', error: err.message });
-    }
-    
 });
 
 export default router;
