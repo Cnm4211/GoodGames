@@ -1,26 +1,26 @@
- document.getElementById('hamburger').addEventListener('click', function () {
-    const panel = document.getElementById('sideMenuPanel');
-    panel.classList.toggle('open');
-  });
+document.getElementById('hamburger').addEventListener('click', function () {
+  const panel = document.getElementById('sideMenuPanel');
+  panel.classList.toggle('open');
+});
 
-  document.getElementById('sideMenuHamburger').addEventListener('click', function () {
-    const panel = document.getElementById('sideMenuPanel');
-    panel.classList.remove('open');
-  });
+document.getElementById('sideMenuHamburger').addEventListener('click', function () {
+  const panel = document.getElementById('sideMenuPanel');
+  panel.classList.remove('open');
+});
 
-  function isTokenValid(token) {
-    if (!token) return false;
+function isTokenValid(token) {
+  if (!token) return false;
 
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.exp * 1000 > Date.now();
-    }
-    catch (e) {
-      return false;
-    }
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000 > Date.now();
   }
+  catch (e) {
+    return false;
+  }
+}
 
-  window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token');
   const myListButton = document.getElementById('myListButton');
   const signInButton = document.getElementById('signInButton');
@@ -42,82 +42,110 @@
   }
 })
 
-  document.getElementById('searchBar').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-      document.getElementById('searchButton').click();
-    }
-  })
+document.getElementById('searchBar').addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') {
+    document.getElementById('searchButton').click();
+  }
+})
 
-  document.getElementById('logoutButton').addEventListener('click', () => {
+document.getElementById('logoutButton').addEventListener('click', () => {
   localStorage.removeItem('token');
   window.location.href = 'Home.html';
 });
 
-  document.getElementById('searchButton').addEventListener('click', async () => {
-    const query = document.getElementById('searchBar').value;
-    const res = await fetch(`/games?search=${encodeURIComponent(query)}`);
-    const data = await res.json();
-    console.log(data);
 
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = '';
 
-    if (!data.results || data.results.length === 0) {
-      resultsDiv.innerHTML = '<p>No results found</p>';
-      return;
-    }
 
-    data.results.forEach(game => {
-      const itemDiv = document.createElement('div');
-      itemDiv.className = 'result-item';
+let currentPage = 1;
 
-      const img = document.createElement('img');
-      img.src = game.background_image || 'https://via.placeholder.com/100';
-      img.alt = game.name;
-      img.style.maxWidth = '100px';
-      img.style.maxHeight = '100px';
+document.getElementById('nextPageButton').addEventListener('click', () => {
+  currentPage++;
+  fetchAndDisplayResults(currentPage);
+});
+document.getElementById('prevPageButton').addEventListener('click', () => {
+  if (currentPage > 1) currentPage--;
+  fetchAndDisplayResults(currentPage);
+});
 
-      const textDiv = document.createElement('div');
-      const p = document.createElement('p');
-      p.textContent = `${game.name} (${game.released}) - Rating: ${game.rating}`;
-      textDiv.appendChild(p);
+async function fetchAndDisplayResults(page) {
+  const query = document.getElementById('searchBar').value;
+  const res = await fetch(`/games?search=${encodeURIComponent(query)}&page=${page}`);
+  const data = await res.json();
+  console.log(data);
 
-      const plus = document.createElement('button');
-      plus.textContent = '+';
-      plus.addEventListener('click', async () => {
-        const token = localStorage.getItem('token');
-        if (!isTokenValid(token)) {
-          alert('Please sign in to add to your list');
-          return;
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '';
+
+  if (!data.results || data.results.length === 0) {
+    resultsDiv.innerHTML = '<p>No results found</p>';
+    return;
+  }
+
+  data.results.forEach(game => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'result-item';
+
+    const img = document.createElement('img');
+    img.src = game.background_image || 'https://via.placeholder.com/100';
+    img.alt = game.name;
+    img.style.maxWidth = '100px';
+    img.style.maxHeight = '100px';
+
+    const textDiv = document.createElement('div');
+    const p = document.createElement('p');
+    p.textContent = `${game.name} (${game.released}) - Rating: ${game.rating}`;
+    textDiv.appendChild(p);
+
+    const plus = document.createElement('button');
+    plus.textContent = '+';
+    plus.addEventListener('click', async () => {
+      const token = localStorage.getItem('token');
+      if (!isTokenValid(token)) {
+        alert('Please sign in to add to your list');
+        return;
+      }
+
+      try {
+        const res = await fetch('/myList', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ game_name: game.name, image: game.background_image, genre: game.genres.map(g => g.name).join(', '), platforms: game.platforms.map(p => p.platform.name).join(', '), release_year: game.released ? game.released.split('-')[0] : 'N/A', rating: game.rating })
+        });
+
+        const result = await res.json();
+        if (res.ok) {
+          alert('Game added to your list');
         }
-
-        try {
-          const res = await fetch('/myList', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ game_name: game.name, image: game.background_image, genre: game.genres.map(g => g.name).join(', '), platforms: game.platforms.map(p => p.platform.name).join(', '), release_year: game.released ? game.released.split('-')[0] : 'N/A', rating: game.rating  })
-          });
-
-          const result = await res.json();
-          if (res.ok) {
-            alert('Game added to your list');
-          }
-        }
-        catch (err) {
-          console.error(err);
-          alert('Failed to add game to your list');
-        }
-      });
-
-      itemDiv.appendChild(img);
-      itemDiv.appendChild(textDiv);
-      itemDiv.appendChild(plus);
-      resultsDiv.appendChild(itemDiv);
+      }
+      catch (err) {
+        console.error(err);
+        alert('Failed to add game to your list');
+      }
     });
 
-
-
+    itemDiv.appendChild(img);
+    itemDiv.appendChild(textDiv);
+    itemDiv.appendChild(plus);
+    resultsDiv.appendChild(itemDiv);
   });
+  const pageNumber = document.getElementById('pageNumber');
+  pageNumber.textContent = `${currentPage}`;
+  return data;
+}
+
+document.getElementById('searchButton').addEventListener('click', async () => {
+
+  const pageDiv = document.getElementById('pages');
+
+  const data = await fetchAndDisplayResults(currentPage);
+
+
+  if (data) {
+    pageDiv.style.display = 'flex';
+    const pageNumber = document.getElementById('pageNumber');
+    pageNumber.textContent = `${currentPage}`;
+  }
+});

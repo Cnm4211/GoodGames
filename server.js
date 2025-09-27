@@ -119,7 +119,7 @@ app.post('/login', async (req, res) => {
 //Rawg API routes
 
 app.get('/games', async (req, res) => {
-    const {search} = req.query;
+    const {search, page} = req.query;
     if (!search || search.trim() === ''){
         return res.status(400).json({message: 'Search query is required'});
     }
@@ -134,9 +134,8 @@ app.get('/games', async (req, res) => {
                 key: process.env.RAWG_API_KEY,
                 search: search,
                 page_size: 10,
-                page: 1,
+                page,
                 ordering: '-rating',
-                
             },
         });
 

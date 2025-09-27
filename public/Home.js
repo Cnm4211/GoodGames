@@ -1,4 +1,3 @@
-
 document.getElementById('hamburger').addEventListener('click', function () {
   const panel = document.getElementById('sideMenuPanel');
   panel.classList.toggle('open');
